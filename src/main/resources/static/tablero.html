@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codifica con Guali</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Codifica con Guali</h1>
+        </header>
+        <main>
+            <section id="tablero-section">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="tablero"></div>
+                    <div id="controles-section" style="margin-top: 24px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+                        <div style="display: flex; gap: 16px; margin-bottom: 12px;">
+                            
+
+    <button class="btn-mov" data-mov="izquierda" title="Izquierda">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" fill="#cddc39" stroke="#333" stroke-width="2"/><polygon points="20,8 8,16 20,24" fill="#333"/></svg>
+    </button>
+    <button class="btn-mov" data-mov="derecha" title="Derecha">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" fill="#ffb300" stroke="#333" stroke-width="2"/><polygon points="12,8 24,16 12,24" fill="#333"/></svg>
+    </button>
+    <button class="btn-mov" data-mov="adelante" title="Adelante">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" fill="#2196f3" stroke="#333" stroke-width="2"/><polygon points="8,20 16,8 24,20" fill="#fff"/></svg>
+    </button>
+    <button class="btn-mov" data-mov="bucle" title="Bucle">
+        <svg width="32" height="32" viewBox="0 0 32 32"><g><path d="M8 16a8 8 0 0 1 8-8c2.5 0 4.7 1.1 6.2 2.8" fill="none" stroke="#f44336" stroke-width="3"/><polygon points="20,4 24,8 18,8" fill="#f44336"/></g><g><path d="M24 16a8 8 0 0 1-8 8c-2.5 0-4.7-1.1-6.2-2.8" fill="none" stroke="#f44336" stroke-width="3"/><polygon points="12,28 8,24 14,24" fill="#f44336"/></g></svg>
+    </button>
+    <button id="ejecutar">Ejecutar</button>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <button id="reiniciar">Reiniciar</button>
+                            <button id="configurar">Configurar</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="movimientos-panel">
+                    <h2>Movimientos</h2> 
+                    <ul id="lista-movimientos"></ul>
+                </div>
+                <img src="https://i.postimg.cc/4yCHk7JW/wall-e.png" alt="Wall-E" style="width: auto; height: 600px;">
+            </section>
+        </main>
+        <div id="panel-configuracion" class="oculto">
+            <!-- Navegación por pestañas -->
+            <div id="config-tabs">
+                <button class="tab-button active" data-tab="pistas">Configurar Pistas</button>
+                <button class="tab-button" data-tab="admin">Administración</button>
+            </div>
+
+            <!-- Pestaña de Pistas (contenido existente) -->
+            <div id="tab-pistas" class="tab-content active">
+                <h2>Configurar Pista</h2>
+                <div id="config-tablero"></div>
+                <div id="config-controles">
+                    <button id="guardar-pista">Guardar Nueva</button>
+                    <button id="guardar-cambios" style="display: none;">Guardar Cambios</button>
+                    <button id="cancelar-edicion" disabled>Cancelar Edición</button>
+                    <button id="cargar-archivo">Cargar desde Archivo</button>
+                    <button id="exportar-archivo">Exportar hacia Archivo</button>
+                </div>
+                <div id="pistas-guardadas">
+                    <h3>Pistas Guardadas</h3>
+                    <ul id="lista-pistas"></ul>
+                </div>
+            </div>
+
+            <!-- Pestaña de Administración (nuevo) -->
+            <div id="tab-admin" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2>Administración del Sistema</h2>
+                    <button id="btn-cerrar-sesion">Cerrar Sesión</button>
+                </div>
+                
+                <!-- Sub-navegación de administración -->
+                <div id="admin-subnav">
+                    <button class="subnav-button active" data-section="administradores">Administradores</button>
+                    <button class="subnav-button" data-section="bitacora">Bitácora</button>
+                    <button class="subnav-button" data-section="estadisticas">Estadísticas</button>
+                </div>
+
+                <!-- Sección Administradores -->
+                <div id="section-administradores" class="admin-section active">
+                    <h3>Gestión de Administradores</h3>
+                    <div style="margin-bottom: 15px;">
+                        <button id="btn-nuevo-admin">Nuevo Administrador</button>
+                    </div>
+                    <table id="tabla-administradores">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Nombre</th>
+                                <th>Fecha Creación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Sección Bitácora -->
+                <div id="section-bitacora" class="admin-section">
+                    <h3>Bitácora del Sistema</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label for="filtro-admin">Filtrar por administrador:</label>
+                        <select id="filtro-admin">
+                            <option value="">Todos los administradores</option>
+                        </select>
+                        <button id="btn-filtrar-bitacora">Filtrar</button>
+                        <button id="btn-limpiar-filtro">Mostrar Todos</button>
+                        <button id="btn-actualizar-bitacora">🔄 Actualizar</button>
+                    </div>
+                    <div class="bitacora-container" style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px;">
+                        <table id="tabla-bitacora" style="width: 100%; margin: 0;">
+                            <thead style="position: sticky; top: 0; background-color: #f5f5f5; z-index: 1;">
+                                <tr>
+                                    <th>Fecha y Hora</th>
+                                    <th>Administrador</th>
+                                    <th>Acción</th>
+                                    <th>Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sección Estadísticas -->
+                <div id="section-estadisticas" class="admin-section">
+                    <h3>Estadísticas de Uso</h3>
+                    
+                    <!-- Filtros de fecha -->
+                    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9;">
+                        <label for="fecha-inicio">Desde:</label>
+                        <input type="date" id="fecha-inicio">
+                        <label for="fecha-fin" style="margin-left: 15px;">Hasta:</label>
+                        <input type="date" id="fecha-fin">
+                        <button id="btn-filtrar-estadisticas" style="margin-left: 15px;">Consultar</button>
+                        <button id="btn-estadisticas-hoy" style="margin-left: 10px;">Hoy</button>
+                    </div>
+
+                    <!-- Cards de estadísticas -->
+                    <div id="estadisticas-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div class="estadistica-card">
+                            <h4>👥 Visitantes Únicos</h4>
+                            <div class="numero" id="stat-visitantes">-</div>
+                        </div>
+                        <div class="estadistica-card">
+                            <h4>📊 Total de Visitas</h4>
+                            <div class="numero" id="stat-visitas">-</div>
+                        </div>
+                        <div class="estadistica-card">
+                            <h4>✅ Misiones Exitosas</h4>
+                            <div class="numero" id="stat-exitos">-</div>
+                        </div>
+                        <div class="estadistica-card">
+                            <h4>❌ Misiones Fallidas</h4>
+                            <div class="numero" id="stat-fallos">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Porcentajes -->
+                    <div style="padding: 15px; border: 1px solid #ccc; border-radius: 5px; background: #f0f8ff;">
+                        <h4>📈 Tasa de Éxito</h4>
+                        <div id="tasa-exito" style="font-size: 1.2rem; font-weight: bold; color: #2196f3;">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="cerrar-config">Cerrar</button>
+        </div>
+        <div id="modal-mensaje" class="oculto">
+            <div id="mensaje-contenido"></div>
+            <button id="cerrar-mensaje">Cerrar</button>
+        </div>
+        
+        <!-- Modal de login para administradores -->
+        <div id="modal-login" class="oculto">
+            <div id="login-contenido">
+                <h3>Login de Administrador</h3>
+                <form id="form-login">
+                    <div>
+                        <label for="username">Usuario:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div id="login-error" class="oculto" style="color: red; margin: 10px 0;"></div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button type="submit" id="btn-login">Iniciar Sesión</button>
+                        <button type="button" id="cerrar-login">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para crear/editar administrador -->
+        <div id="modal-admin" class="oculto">
+            <div id="admin-contenido">
+                <h3 id="admin-modal-title">Nuevo Administrador</h3>
+                <form id="form-admin">
+                    <div>
+                        <label for="admin-username">Usuario:</label>
+                        <input type="text" id="admin-username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="admin-nombre">Nombre:</label>
+                        <input type="text" id="admin-nombre" name="nombre" required>
+                    </div>
+                    <div>
+                        <label for="admin-password">Contraseña:</label>
+                        <input type="password" id="admin-password" name="password" required>
+                    </div>
+                    <div id="admin-error" class="oculto" style="color: red; margin: 10px 0;"></div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button type="submit" id="btn-guardar-admin">Guardar</button>
+                        <button type="button" id="cerrar-admin">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="tablero.js"></script>
+</body>
+</html>
