@@ -27,10 +27,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/bitacora/**").hasRole("ADMIN")
                 .requestMatchers("/api/estadisticas/**").hasRole("ADMIN")
                 .requestMatchers("/api/pistas/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
-            // Elimina formLogin si no lo usas
-            //.formLogin().disable()
             .csrf(csrf -> csrf.disable())
             .httpBasic(Customizer.withDefaults());
         return http.build();
