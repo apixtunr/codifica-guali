@@ -464,12 +464,10 @@ function renderTablaBitacora(entradas) {
     
     entradas.forEach(entrada => {
         const tr = document.createElement('tr');
-        // Mostrar la fecha y hora actual del navegador
-        const ahora = new Date();
-        const fechaFormateada = ahora.toLocaleDateString();
-        const horaFormateada = ahora.toLocaleTimeString();
+        const fecha = new Date(entrada.fecha);
+        
         tr.innerHTML = `
-            <td>${fechaFormateada} ${horaFormateada}</td>
+            <td>${fecha}</td>
             <td><strong>${entrada.administrador}</strong></td>
             <td>${entrada.accion}</td>
             <td>${entrada.detalles || '-'}</td>
