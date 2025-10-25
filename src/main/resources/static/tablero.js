@@ -908,6 +908,17 @@ async function cargarPistaAleatoria() {
         
         pistaActual = JSON.parse(JSON.stringify(pistaSeleccionada.ruta));
         
+        // Verificar que la pista tenga al menos una celda
+        if (!pistaActual || pistaActual.length === 0) {
+            console.error('La pista seleccionada está vacía');
+            mostrarMensaje('Error: La pista seleccionada está vacía. Contacta al administrador.');
+            pistaActual = [];
+            robot = { x: 0, y: 0, dir: 0 };
+            crearTablero([], robot);
+            renderMovimientos();
+            return;
+        }
+        
         // Ordenar la pista: primero por Y (fila), luego por X (columna)
         // Esto garantiza que la primera celda sea la esquina superior izquierda
         pistaActual.sort((a, b) => {
@@ -1312,21 +1323,40 @@ function configurarEventListeners() {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
-            input.onchange = e => {
+            input.onchange = async e => {
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
-                reader.onload = evt => {
+                reader.onload = async evt => {
                     try {
                         const data = JSON.parse(evt.target.result);
-                        if (Array.isArray(data)) {
-                            pistasGuardadas.push({ nombre: 'Pista importada', ruta: data });
-                            guardarPistasEnStorage();
-                            renderListaPistas();
-                            mostrarMensaje('Pista cargada');
+                        if (Array.isArray(data) && data.length > 0) {
+                            // Verificar que los datos tengan la estructura correcta
+                            if (data.every(p => typeof p.x === 'number' && typeof p.y === 'number')) {
+                                // Si hay admin logueado, guardar en la API
+                                if (sesionAdmin) {
+                                    const nombrePista = prompt('Nombre para la pista importada:', 'Pista importada');
+                                    if (nombrePista) {
+                                        const exitoso = await guardarPistaEnAPI(nombrePista, data);
+                                        if (exitoso) {
+                                            await renderListaPistas();
+                                            mostrarMensaje('Pista cargada y guardada en el servidor');
+                                        } else {
+                                            mostrarMensaje('Error al guardar la pista en el servidor');
+                                        }
+                                    }
+                                } else {
+                                    mostrarMensaje('Debes iniciar sesión como administrador para importar pistas');
+                                }
+                            } else {
+                                mostrarMensaje('Archivo inválido: formato de pista incorrecto');
+                            }
+                        } else {
+                            mostrarMensaje('Archivo inválido: debe contener un array de posiciones');
                         }
-                    } catch {
-                        mostrarMensaje('Archivo inválido');
+                    } catch (error) {
+                        console.error('Error al parsear archivo:', error);
+                        mostrarMensaje('Archivo inválido: no es un JSON válido');
                     }
                 };
                 reader.readAsText(file);
