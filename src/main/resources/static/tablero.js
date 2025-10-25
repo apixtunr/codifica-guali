@@ -59,7 +59,7 @@ function generarIdSesion() {
 /* Función para registrar eventos de estadísticas */
 async function registrarEstadistica(tipoEvento, detalles = '') {
     try {
-        await fetch('/api/estadisticas/registrar', {
+        const response = await fetch('/api/estadisticas/registrar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -70,6 +70,10 @@ async function registrarEstadistica(tipoEvento, detalles = '') {
                 sesionUsuario: sesionUsuario
             })
         });
+        // Si el admin está logueado y la petición fue exitosa, actualizar estadísticas con un pequeño delay
+        if (response.ok && sesionAdmin) {
+            setTimeout(cargarEstadisticasHoy, 400);
+        }
     } catch (error) {
         console.error('Error al registrar estadística:', error);
     }
