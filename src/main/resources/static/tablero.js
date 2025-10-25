@@ -27,6 +27,27 @@ function ocultarMensaje() {
 /* Variables para autenticación */
 let sesionAdmin = null; // Almacena los datos de autenticación
 
+// --- Persistencia de sesión admin ---
+function guardarSesionAdmin(adminObj) {
+    localStorage.setItem('sesionAdmin', JSON.stringify(adminObj));
+}
+
+function cargarSesionAdmin() {
+    const data = localStorage.getItem('sesionAdmin');
+    if (data) {
+        try {
+            sesionAdmin = JSON.parse(data);
+        } catch {
+            sesionAdmin = null;
+        }
+    }
+}
+
+function limpiarSesionAdmin() {
+    localStorage.removeItem('sesionAdmin');
+    sesionAdmin = null;
+}
+
 /* Variables para estadísticas */
 let sesionUsuario = generarIdSesion(); // ID único para esta sesión de usuario
 
@@ -90,6 +111,7 @@ async function autenticarAdmin(username, password) {
                 adminData: data.admin,
                 credentials: btoa(username + ':' + password) // Guardar para futuras peticiones autenticadas
             };
+            guardarSesionAdmin(sesionAdmin); // Guardar en localStorage
             // Registrar login en bitácora
             setTimeout(() => registrarEnBitacora('Inicio de sesión', 'Administrador accedió al sistema'), 500);
             ocultarLogin();
@@ -1188,7 +1210,7 @@ function cerrarSesion() {
         // Registrar cierre de sesión antes de limpiar la sesión
         registrarEnBitacora('Cierre de sesión', 'Administrador cerró sesión');
         setTimeout(() => {
-            sesionAdmin = null;
+            limpiarSesionAdmin();
             document.getElementById('panel-configuracion').classList.add('oculto');
             mostrarMensaje('Sesión cerrada exitosamente');
             setTimeout(ocultarMensaje, 2000);
@@ -1511,6 +1533,8 @@ function configurarEventListeners() {
 
 /* Inicialización al cargar la página */
 document.addEventListener('DOMContentLoaded', async function() {
+    // Restaurar sesión admin si existe
+    cargarSesionAdmin();
     console.log('INICIANDO INICIALIZACIÓN DE LA PÁGINA - DOM CARGADO');
     try {
         // Primero configurar event listeners
@@ -1528,6 +1552,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             actualizarEstadoBotones();
             console.log('INICIALIZACIÓN COMPLETADA EXITOSAMENTE');
         }, 100);
+        // Si hay sesión admin, ir directo a admin
+        if (sesionAdmin) {
+            cambiarPestana('admin');
+        }
     } catch (error) {
         console.error('ERROR EN INICIALIZACIÓN:', error);
         // Fallback de emergencia - mostrar mensaje de error
