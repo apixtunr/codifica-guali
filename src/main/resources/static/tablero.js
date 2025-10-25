@@ -315,12 +315,10 @@ async function guardarAdministrador(datos) {
             // Si no se cambió la contraseña, usar la existente
             if (!datos.password) {
                 datos.password = adminEditando.password;
-            } else {
-                datos.password = '{noop}' + datos.password;
             }
-        } else {
-            datos.password = '{noop}' + datos.password;
+            // Si sí se cambió, se envía tal cual
         }
+        // Si es nuevo, se envía tal cual
         
         const response = await fetch(url, {
             method: method,
