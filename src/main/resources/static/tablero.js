@@ -464,7 +464,7 @@ function renderTablaBitacora(entradas) {
     
     entradas.forEach(entrada => {
         const tr = document.createElement('tr');
-        const fecha = new Date(entrada.fecha);
+        const fecha = new Date(entrada.fecha).toLocaleString('es-ES');
         
         tr.innerHTML = `
             <td>${fecha}</td>
