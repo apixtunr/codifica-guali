@@ -311,7 +311,10 @@ async function guardarAdministrador(datos) {
     try {
         let url = '/api/administradores';
         let method = 'POST';
-        
+        let propioEditado = false;
+        let nuevoUsername = datos.username;
+        let nuevaPassword = datos.password;
+
         if (adminEditando) {
             url += `/${adminEditando.id}`;
             method = 'PUT';
@@ -319,10 +322,12 @@ async function guardarAdministrador(datos) {
             if (!datos.password) {
                 datos.password = adminEditando.password;
             }
-            // Si sí se cambió, se envía tal cual
+            // Detectar si el admin está editando su propio usuario
+            if (sesionAdmin && adminEditando.username === sesionAdmin.username) {
+                propioEditado = true;
+            }
         }
-        // Si es nuevo, se envía tal cual
-        
+
         const response = await fetch(url, {
             method: method,
             headers: {
@@ -331,7 +336,7 @@ async function guardarAdministrador(datos) {
             },
             body: JSON.stringify(datos)
         });
-        
+
         if (response.ok) {
             // Registrar acción en bitácora
             const accion = adminEditando ? 'Modificar administrador' : 'Crear administrador';
@@ -339,6 +344,24 @@ async function guardarAdministrador(datos) {
                 `Modificó datos del administrador: ${datos.username}` : 
                 `Creó nuevo administrador: ${datos.username}`;
             registrarEnBitacora(accion, detalles);
+
+            // Si el admin editó su propio usuario, forzar logout o re-login
+            if (propioEditado) {
+                // Si cambió la contraseña, las credenciales actuales ya no sirven
+                // Si el username cambió, también hay que reloguear
+                let cambioCredenciales = false;
+                if (adminEditando.username !== nuevoUsername) cambioCredenciales = true;
+                if (nuevaPassword && nuevaPassword !== adminEditando.password) cambioCredenciales = true;
+
+                if (cambioCredenciales) {
+                    mostrarMensaje('Has modificado tu propio usuario o contraseña. Por seguridad, debes volver a iniciar sesión.');
+                    setTimeout(() => {
+                        limpiarSesionAdmin();
+                        document.getElementById('panel-configuracion').classList.add('oculto');
+                        mostrarLogin();
+                    }, 1800);
+                }
+            }
             return true;
         } else {
             const error = await response.text();
