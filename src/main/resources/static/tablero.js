@@ -1470,9 +1470,9 @@ function configurarEventListeners() {
         btnNuevoAdmin.onclick = () => mostrarModalAdmin();
     }
     
-    const btnCerrarModalAdmin = document.getElementById('btn-cerrar-modal-admin');
-    if (btnCerrarModalAdmin) {
-        btnCerrarModalAdmin.onclick = ocultarModalAdmin;
+    const btnCerrarAdmin = document.getElementById('cerrar-admin');
+    if (btnCerrarAdmin) {
+        btnCerrarAdmin.onclick = ocultarModalAdmin;
     }
     
     // Event listeners para estadísticas
