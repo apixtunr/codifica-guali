@@ -146,7 +146,7 @@ async function registrarEnBitacora(accion, detalles = '') {
     if (!sesionAdmin) return;
     
     try {
-        await fetch('/api/bitacora/registrar', {
+        const response = await fetch('/api/bitacora/registrar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -158,10 +158,9 @@ async function registrarEnBitacora(accion, detalles = '') {
                 detalles: detalles
             })
         });
-        
-        // Si estamos viendo la bitácora, actualizarla inmediatamente
-        if (document.getElementById('section-bitacora').classList.contains('active')) {
-            setTimeout(cargarBitacora, 300); // Pequeño delay para que se procese en el servidor
+        // Si estamos viendo la bitácora y la petición fue exitosa, actualizarla inmediatamente
+        if (response.ok && document.getElementById('section-bitacora').classList.contains('active')) {
+            cargarBitacora();
         }
     } catch (error) {
         console.error('Error al registrar en bitácora:', error);
