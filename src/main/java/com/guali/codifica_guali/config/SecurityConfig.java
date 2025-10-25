@@ -22,17 +22,19 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/tablero.html", "/estilos.css", "/tablero.js", "/images/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/init/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/pistas", "/api/pistas/**").permitAll()
+                .requestMatchers("/api/init/**").permitAll() // Endpoint temporal para crear admin inicial
+                .requestMatchers(HttpMethod.GET, "/api/pistas", "/api/pistas/**").permitAll() // Lectura pública de pistas
+                .requestMatchers(HttpMethod.POST, "/api/pistas/**").hasRole("ADMIN") // Crear/guardar pistas requiere admin
+                .requestMatchers(HttpMethod.PUT, "/api/pistas/**").hasRole("ADMIN") // Editar pistas requiere admin
+                .requestMatchers(HttpMethod.DELETE, "/api/pistas/**").hasRole("ADMIN") // Borrar pistas requiere admin
                 .requestMatchers("/api/administradores/**").hasRole("ADMIN")
                 .requestMatchers("/api/bitacora/**").hasRole("ADMIN")
                 .requestMatchers("/api/estadisticas/**").hasRole("ADMIN")
-                .requestMatchers("/api/pistas/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.disable())
-            .httpBasic(httpBasic -> httpBasic.disable())
-            .formLogin(formLogin -> formLogin.disable());
+            .httpBasic(httpBasic -> httpBasic.disable()) // Deshabilitar HTTP Basic Auth
+            .formLogin(formLogin -> formLogin.disable()); // Deshabilitar form login
         return http.build();
     }
 }
