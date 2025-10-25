@@ -33,7 +33,10 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.disable())
-            .httpBasic(httpBasic -> httpBasic.disable()) // Deshabilitar HTTP Basic Auth
+            .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint((request, response, authException) -> {
+                // No enviar el header WWW-Authenticate que causa el popup
+                response.sendError(401, "Unauthorized");
+            })) // Habilitar HTTP Basic pero sin popup
             .formLogin(formLogin -> formLogin.disable()); // Deshabilitar form login
         return http.build();
     }
