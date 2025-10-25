@@ -634,11 +634,11 @@ function renderEstadisticas(stats) {
     
     // Cambiar color según la tasa de éxito
     if (tasaExito >= 70) {
-        elementoTasa.style.color = '#4caf50'; // Verde
+        elementoTasa.style.color = '#008000'; // Verde fuerte
     } else if (tasaExito >= 40) {
-        elementoTasa.style.color = '#ff9800'; // Naranja
+        elementoTasa.style.color = '#ff6600'; // Naranja fuerte
     } else {
-        elementoTasa.style.color = '#f44336'; // Rojo
+        elementoTasa.style.color = '#d50000'; // Rojo fuerte
     }
     
     console.log('=== renderEstadisticas completado ===');
@@ -1364,6 +1364,10 @@ function configurarEventListeners() {
                                 } else {
                                     mostrarMensaje('Debes iniciar sesión como administrador para importar pistas');
                                 }
+                                // Cargar la pista importada al tablero principal (juego)
+                                configPista = JSON.parse(JSON.stringify(data));
+                                pistaActual = JSON.parse(JSON.stringify(data));
+                                crearTablero(pistaActual, robot); // robot es la posición actual del robot
                             } else {
                                 mostrarMensaje('Archivo inválido: formato de pista incorrecto');
                             }
