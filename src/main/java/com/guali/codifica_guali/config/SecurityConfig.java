@@ -15,6 +15,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/tablero.html", "/estilos.css", "/tablero.js", "/images/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/init/**").permitAll() // Endpoint temporal para crear admin inicial
                 .requestMatchers("/api/administradores/**").hasRole("ADMIN")
                 .requestMatchers("/api/bitacora/**").hasRole("ADMIN")
                 .requestMatchers("/api/estadisticas/**").hasRole("ADMIN")
