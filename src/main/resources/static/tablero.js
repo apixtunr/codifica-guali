@@ -1321,13 +1321,10 @@ function configurarEventListeners() {
             if (modoEdicion) {
                 return mostrarMensaje('No puedes guardar una nueva pista mientras estás editando. Termina la edición primero.');
             }
-            
             if (configPista.length === 0) return mostrarMensaje('Selecciona al menos una celda');
             if (!sesionAdmin) return mostrarMensaje('Debes estar autenticado para guardar pistas');
-            
             const nombre = prompt('Nombre de la pista:');
             if (!nombre) return;
-            
             const exitoso = await guardarPistaEnAPI(nombre, configPista);
             if (exitoso) {
                 await renderListaPistas();
@@ -1337,6 +1334,18 @@ function configurarEventListeners() {
             } else {
                 mostrarMensaje('Error al guardar la pista');
             }
+        };
+    }
+
+    // Botón regresar al menú admin desde pistas
+    const btnRegresarAdmin = document.getElementById('btn-regresar-admin');
+    if (btnRegresarAdmin) {
+        btnRegresarAdmin.onclick = () => {
+            // Cambiar a la pestaña de administración
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-tab="admin"]').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('tab-admin').classList.add('active');
         };
     }
     
@@ -1493,26 +1502,28 @@ function configurarEventListeners() {
     }
     
     // Event listeners para formularios de administrador
-    const formAdmin = document.getElementById('form-admin');
-    if (formAdmin) {
-        formAdmin.onsubmit = async function(e) {
+    // Declaración única de formLogin al inicio de la función
+    if (formLogin) {
+        formLogin.onsubmit = async function(e) {
             e.preventDefault();
-            const datos = {
-                username: document.getElementById('admin-username').value,
-                nombre: document.getElementById('admin-nombre').value,
-                password: document.getElementById('admin-password').value
-            };
-            
-            const exitoso = await guardarAdministrador(datos);
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const exitoso = await autenticarAdmin(username, password);
             if (exitoso) {
-                ocultarModalAdmin();
-                cargarAdministradores();
-                mostrarMensaje('Administrador guardado exitosamente');
-                setTimeout(ocultarMensaje, 2000);
+                mostrarMensaje('Login exitoso. Accediendo al menú de administración...');
+                setTimeout(async () => {
+                    ocultarMensaje();
+                    document.getElementById('panel-configuracion').classList.remove('oculto');
+                    // Mostrar la pestaña de administración por defecto
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelector('[data-tab="admin"]').classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById('tab-admin').classList.add('active');
+                    inicializarPestanas();
+                }, 1000);
             }
         };
     }
-    
     // Event listeners para botones de modal administrador
     const btnNuevoAdmin = document.getElementById('btn-nuevo-admin');
     if (btnNuevoAdmin) {
