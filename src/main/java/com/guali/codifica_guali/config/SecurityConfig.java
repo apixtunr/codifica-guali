@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/pistas/**").hasRole("ADMIN") // Borrar pistas requiere admin
                 .requestMatchers("/api/administradores/**").hasRole("ADMIN")
                 .requestMatchers("/api/bitacora/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/estadisticas/registrar").permitAll() // Permitir registrar estadísticas sin autenticación
                 .requestMatchers("/api/estadisticas/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
