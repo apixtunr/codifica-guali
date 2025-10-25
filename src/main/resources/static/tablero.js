@@ -907,8 +907,16 @@ async function cargarPistaAleatoria() {
         console.log('Pista seleccionada:', pistaSeleccionada.nombre);
         
         pistaActual = JSON.parse(JSON.stringify(pistaSeleccionada.ruta));
+        
+        // Ordenar la pista: primero por Y (fila), luego por X (columna)
+        // Esto garantiza que la primera celda sea la esquina superior izquierda
+        pistaActual.sort((a, b) => {
+            if (a.y !== b.y) return a.y - b.y; // Ordenar por fila
+            return a.x - b.x; // Si están en la misma fila, ordenar por columna
+        });
+        
         robot = { x: pistaActual[0].x, y: pistaActual[0].y, dir: 0 };
-        console.log('pistaActual configurada:', pistaActual);
+        console.log('pistaActual configurada y ordenada:', pistaActual);
         console.log('robot configurado:', robot);
     } else {
         // Si no hay pistas en el backend, mostrar mensaje de error
