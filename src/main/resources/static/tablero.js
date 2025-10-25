@@ -1,10 +1,3 @@
-// Modal para editar nombre de pista
-function mostrarModalNombrePista(nombreActual, callback) {
-    const nuevoNombre = prompt('Editar nombre de la pista:', nombreActual || '');
-    if (nuevoNombre && nuevoNombre.trim()) {
-        callback(nuevoNombre.trim());
-    }
-}
 /* Configuración inicial y variables globales */
 const TAM = 6; 
 let pistasGuardadas = [];
@@ -897,22 +890,8 @@ function iniciarEdicionPista(pista, indice) {
     // Actualizar estado de botones
     actualizarEstadoBotones();
     
-    // Mostrar mensaje informativo con nombre editable
-    mostrarMensaje(`Editando: <b id='nombre-editable-pista'>${pista.nombre}</b>. Modifica el tablero, el nombre o haz clic en "Guardar Cambios".`);
-    setTimeout(() => {
-        // Hacer el nombre editable al hacer clic
-        const nombreElem = document.getElementById('nombre-editable-pista');
-        if (nombreElem) {
-            nombreElem.style.cursor = 'pointer';
-            nombreElem.title = 'Haz clic para editar el nombre';
-            nombreElem.onclick = () => {
-                mostrarModalNombrePista(pistaEditando.nombre, nuevoNombre => {
-                    pistaEditando.nombre = nuevoNombre;
-                    nombreElem.textContent = nuevoNombre;
-                });
-            };
-        }
-    }, 100);
+    // Mostrar mensaje informativo
+    mostrarMensaje(`Editando: ${pista.nombre}. Modifica el tablero y haz clic en "Guardar Cambios".`);
     setTimeout(ocultarMensaje, 3000);
 }
 
@@ -1423,15 +1402,11 @@ function configurarEventListeners() {
     if (guardarCambios) {
         guardarCambios.onclick = async () => {
             if (modoEdicion && pistaEditando) {
-                // Validar nombre
-                if (!pistaEditando.nombre || !pistaEditando.nombre.trim()) {
-                    mostrarMensaje('El nombre de la pista no puede estar vacío');
-                    return;
-                }
+                // Guardar cambios
                 if (configPista.length === 0) {
-                    mostrarMensaje('No hay pista para guardar');
-                    return;
+                    return mostrarMensaje('No hay pista para guardar');
                 }
+                
                 const exitoso = await guardarPistaEnAPI(pistaEditando.nombre, configPista, true, pistaEditando.id);
                 if (exitoso) {
                     mostrarMensaje('Pista actualizada exitosamente');
