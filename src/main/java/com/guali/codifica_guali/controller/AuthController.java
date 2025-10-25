@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,9 @@ public class AuthController {
 
     @Autowired
     private AdministradorService administradorService;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credentials) {
@@ -30,7 +34,7 @@ public class AuthController {
         
         Map<String, Object> response = new HashMap<>();
         
-        if (admin.isPresent() && verificarPassword(admin.get().getPassword(), password)) {
+        if (admin.isPresent() && passwordEncoder.matches(password, admin.get().getPassword())) {
             response.put("success", true);
             response.put("message", "Login exitoso");
             response.put("admin", admin.get());
@@ -40,13 +44,5 @@ public class AuthController {
             response.put("message", "Usuario o contraseña incorrectos");
             return ResponseEntity.badRequest().body(response);
         }
-    }
-    
-    private boolean verificarPassword(String passwordBD, String passwordIngresada) {
-        // Si la contraseña en BD tiene {noop}, la comparamos directamente
-        if (passwordBD.startsWith("{noop}")) {
-            return passwordBD.substring(6).equals(passwordIngresada);
-        }
-        return passwordBD.equals(passwordIngresada);
     }
 }
