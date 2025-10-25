@@ -76,95 +76,119 @@ body, #app {
 /* Móviles y pantallas pequeñas */
 @media (max-width: 600px) {
     body {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        padding: 0;
     }
     
     #app {
-        padding: 12px;
-        margin: 8px;
+        padding: 8px;
+        margin: 4px;
         border-radius: 8px;
     }
     
     header h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         text-align: center;
+        margin-bottom: 8px;
     }
     
     main {
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
     }
     
     #tablero-section {
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
     }
     
     #tablero, #config-tablero {
-        width: 95vw;
-        height: 95vw;
-        max-width: 360px;
-        max-height: 360px;
+        width: calc(100vw - 32px);
+        height: calc(100vw - 32px);
+        max-width: 340px;
+        max-height: 340px;
         grid-template-columns: repeat(6, 1fr);
         grid-template-rows: repeat(6, 1fr);
-        gap: 4px;
-        padding: 8px;
+        gap: 3px;
+        padding: 6px;
     }
     
     .celda {
         width: 100%;
         height: 100%;
-        max-width: 60px;
-        max-height: 60px;
-        font-size: 1.5rem;
+        max-width: none;
+        max-height: none;
+        font-size: 1.3rem;
+        border-radius: 4px;
     }
     
     #controles-section {
-        margin-top: 16px !important;
+        margin-top: 12px !important;
         width: 100% !important;
+        padding: 0 8px;
     }
     
-    #controles-section > div {
-        flex-wrap: wrap;
+    #controles-section > div:first-child {
+        display: flex !important;
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+    
+    #controles-section > div:last-child {
+        display: flex !important;
+        gap: 8px !important;
         justify-content: center;
     }
     
     .btn-mov {
-        font-size: 1.2rem;
-        padding: 8px 16px;
+        font-size: 1rem;
+        padding: 6px 8px;
+        min-width: 48px;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .btn-mov svg {
-        width: 24px !important;
-        height: 24px !important;
+        width: 28px !important;
+        height: 28px !important;
     }
     
     #ejecutar, #reiniciar, #configurar {
-        font-size: 1.1rem;
-        padding: 8px 16px;
+        font-size: 0.95rem;
+        padding: 10px 16px;
         flex: 1;
-        min-width: 100px;
+        min-width: 90px;
+        border-radius: 6px;
     }
     
     #movimientos-panel {
-        width: 100%;
+        width: calc(100vw - 32px);
+        max-width: 340px;
         min-width: auto;
-        padding: 12px 16px;
-        min-height: 250px;
+        padding: 10px 12px;
+        min-height: 180px;
+        margin: 0 auto;
     }
     
     #movimientos-panel h2 {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        margin-bottom: 8px;
     }
     
     #lista-movimientos {
-        max-height: 300px;
+        max-height: 200px;
     }
     
     #lista-movimientos li {
-        padding: 6px 12px;
-        font-size: 1rem;
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+        gap: 8px;
     }
     
     #tablero-section > img {
@@ -173,83 +197,141 @@ body, #app {
     
     /* Modales responsive */
     #mensaje-contenido {
-        padding: 20px 24px;
-        font-size: 1.1rem;
-        margin: 0 16px;
+        padding: 16px 20px;
+        font-size: 1rem;
+        margin: 0 12px;
+        max-width: calc(100vw - 40px);
+    }
+    
+    #cerrar-mensaje {
+        padding: 8px 20px;
+        font-size: 0.95rem;
     }
     
     #login-contenido,
     #admin-contenido {
         min-width: auto;
-        width: 90%;
-        max-width: 400px;
-        padding: 20px;
+        width: calc(100vw - 40px);
+        max-width: 350px;
+        padding: 16px;
+    }
+    
+    #login-contenido h3,
+    #admin-contenido h3 {
+        font-size: 1.1rem;
+    }
+    
+    #form-login input[type="text"],
+    #form-login input[type="password"],
+    #form-admin input[type="text"],
+    #form-admin input[type="password"] {
+        font-size: 0.95rem;
+        padding: 8px;
     }
     
     /* Tabs responsive */
     #config-tabs {
         flex-wrap: wrap;
+        gap: 4px;
     }
     
     .tab-button {
-        padding: 8px 12px;
-        font-size: 0.9rem;
+        padding: 6px 10px;
+        font-size: 0.85rem;
         flex: 1;
-        min-width: 80px;
+        min-width: 70px;
     }
     
     /* Administración responsive */
     #admin-subnav {
         flex-wrap: wrap;
+        gap: 6px;
     }
     
     .subnav-button {
-        padding: 6px 12px;
-        font-size: 0.9rem;
+        padding: 6px 10px;
+        font-size: 0.85rem;
         flex: 1;
-        min-width: 100px;
+        min-width: 90px;
     }
     
     /* Tablas responsive */
     #tabla-administradores,
     #tabla-bitacora {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
+        display: block;
+        overflow-x: auto;
     }
     
     #tabla-administradores th,
     #tabla-administradores td,
     #tabla-bitacora th,
     #tabla-bitacora td {
-        padding: 6px;
+        padding: 4px 6px;
+        font-size: 0.75rem;
+    }
+    
+    .btn-accion {
+        font-size: 0.75rem;
+        padding: 3px 6px;
     }
     
     /* Estadísticas responsive */
     #estadisticas-cards {
         grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+    
+    .estadistica-card {
+        padding: 10px;
+    }
+    
+    .estadistica-card h4 {
+        font-size: 0.9rem;
     }
     
     .estadistica-card .numero {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
     /* Panel de configuración responsive */
     #panel-configuracion {
-        padding: 12px;
+        padding: 8px;
         overflow-y: auto;
     }
     
     #pistas-guardadas {
         min-width: auto;
         width: 100%;
+        max-width: 340px;
+        padding: 10px 12px;
+        margin: 0 auto 12px;
+    }
+    
+    #pistas-guardadas h3 {
+        font-size: 0.95rem;
+    }
+    
+    #lista-pistas li {
+        font-size: 0.85rem;
+        padding: 6px 10px;
     }
     
     #config-controles {
         flex-wrap: wrap;
+        gap: 6px;
     }
     
     #config-controles button {
         flex: 1;
-        min-width: 100px;
+        min-width: 80px;
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+    
+    #cerrar-config {
+        font-size: 0.95rem;
+        padding: 8px 16px;
     }
 }
 
