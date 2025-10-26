@@ -84,6 +84,7 @@ function mostrarLogin() {
     const modal = document.getElementById('modal-login');
     modal.classList.remove('oculto');
     document.getElementById('username').focus();
+    cargarAdministradores();
 }
 
 function ocultarLogin() {
