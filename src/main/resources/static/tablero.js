@@ -120,6 +120,7 @@ async function autenticarAdmin(username, password) {
             setTimeout(() => registrarEnBitacora('Inicio de sesión', 'Administrador accedió al sistema'), 500);
             ocultarLogin();
             cargarAdministradores();
+            renderConfigTablero()
             renderListaPistas();
             cargarPistasDeAPI();
             return true;
