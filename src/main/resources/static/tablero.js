@@ -121,6 +121,7 @@ async function autenticarAdmin(username, password) {
             ocultarLogin();
             cargarAdministradores();
             renderListaPistas();
+            cargarPistasDeAPI();
             return true;
         } else {
             // Error de autenticación
