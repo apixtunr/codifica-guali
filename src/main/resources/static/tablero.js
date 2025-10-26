@@ -118,8 +118,9 @@ async function autenticarAdmin(username, password) {
             guardarSesionAdmin(sesionAdmin); // Guardar en localStorage
             // Registrar login en bitácora
             setTimeout(() => registrarEnBitacora('Inicio de sesión', 'Administrador accedió al sistema'), 500);
-            cargarAdministradores();
             ocultarLogin();
+            cargarAdministradores();
+            cargarPistasDeAPI();
             return true;
         } else {
             // Error de autenticación
