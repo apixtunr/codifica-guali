@@ -1256,14 +1256,13 @@ function configurarEventListeners() {
     // Event listeners para login
     const cerrarLogin = document.getElementById('cerrar-login');
     if (cerrarLogin) cerrarLogin.onclick = ocultarLogin;
-    
+
     const formLogin = document.getElementById('form-login');
     if (formLogin) {
         formLogin.onsubmit = async function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
             const exitoso = await autenticarAdmin(username, password);
             if (exitoso) {
                 mostrarMensaje('Login exitoso. Accediendo a configuración...');
@@ -1275,6 +1274,36 @@ function configurarEventListeners() {
                     inicializarPestanas();
                 }, 1000);
             }
+        };
+    }
+
+    // Event listener para submit de form-admin (crear/editar admin)
+    const formAdmin = document.getElementById('form-admin');
+    if (formAdmin) {
+        formAdmin.onsubmit = async function(e) {
+            e.preventDefault();
+            // Ocultar error anterior
+            document.getElementById('admin-error').classList.add('oculto');
+            // Obtener datos
+            const username = document.getElementById('admin-username').value.trim();
+            const nombre = document.getElementById('admin-nombre').value.trim();
+            const password = document.getElementById('admin-password').value;
+            // Validación básica
+            if (!username || !nombre || (!adminEditando && !password)) {
+                document.getElementById('admin-error').textContent = 'Completa todos los campos obligatorios';
+                document.getElementById('admin-error').classList.remove('oculto');
+                return;
+            }
+            // Construir objeto datos
+            const datos = { username, nombre };
+            if (password) datos.password = password;
+            // Guardar
+            const exitoso = await guardarAdministrador(datos);
+            if (exitoso) {
+                ocultarModalAdmin();
+                await cargarAdministradores();
+            }
+            // Si hay error, se muestra desde guardarAdministrador
         };
     }
     
