@@ -84,7 +84,6 @@ function mostrarLogin() {
     const modal = document.getElementById('modal-login');
     modal.classList.remove('oculto');
     document.getElementById('username').focus();
-    cargarAdministradores();
 }
 
 function ocultarLogin() {
@@ -119,6 +118,7 @@ async function autenticarAdmin(username, password) {
             guardarSesionAdmin(sesionAdmin); // Guardar en localStorage
             // Registrar login en bitácora
             setTimeout(() => registrarEnBitacora('Inicio de sesión', 'Administrador accedió al sistema'), 500);
+            cargarAdministradores();
             ocultarLogin();
             return true;
         } else {
