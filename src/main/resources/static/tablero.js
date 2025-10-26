@@ -1302,6 +1302,8 @@ function configurarEventListeners() {
             if (exitoso) {
                 ocultarModalAdmin();
                 await cargarAdministradores();
+                mostrarMensaje('Administrador creado correctamente');
+                setTimeout(ocultarMensaje, 2000);
             }
             // Si hay error, se muestra desde guardarAdministrador
         };
