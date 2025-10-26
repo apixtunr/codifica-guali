@@ -866,3 +866,8 @@ main {
     display: block;
     width: 100%;
 }
+
+#panel-configuracion {
+    max-height: 100vh;
+    overflow-y: auto;
+}
