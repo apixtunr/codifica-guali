@@ -1265,14 +1265,17 @@ function configurarEventListeners() {
             const password = document.getElementById('password').value;
             const exitoso = await autenticarAdmin(username, password);
             if (exitoso) {
-                mostrarMensaje('Login exitoso. Accediendo a configuración...');
-                ocultarMensaje();
-                document.getElementById('panel-configuracion').classList.remove('oculto');
-                renderConfigTablero();
-                await renderListaPistas();
-                inicializarPestanas();
-                // Usar el flujo normal de cambio de pestaña para activar admin y cargar datos
-                cambiarPestana('admin');
+                mostrarMensaje('Login exitoso. Accediendo al menú de administración...');
+                setTimeout(async () => {
+                    ocultarMensaje();
+                    document.getElementById('panel-configuracion').classList.remove('oculto');
+                    // Mostrar la pestaña de administración por defecto
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelector('[data-tab="admin"]').classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById('tab-admin').classList.add('active');
+                    inicializarPestanas();
+                }, 1000);
             }
         };
     }
