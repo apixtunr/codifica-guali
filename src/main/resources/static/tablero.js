@@ -27,25 +27,6 @@ function ocultarMensaje() {
 /* Variables para autenticación */
 let sesionAdmin = null; // Almacena los datos de autenticación
 
-// Al cargar el script, intentar restaurar sesión admin
-cargarSesionAdmin();
-document.addEventListener('DOMContentLoaded', async () => {
-    if (sesionAdmin) {
-        document.getElementById('panel-configuracion').classList.remove('oculto');
-        renderConfigTablero();
-        await renderListaPistas();
-        inicializarPestanas();
-        // Activar pestaña admin y cargar administradores
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        const adminTabBtn = document.querySelector('[data-tab="admin"]');
-        if (adminTabBtn) adminTabBtn.classList.add('active');
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        const adminTabContent = document.getElementById('tab-admin');
-        if (adminTabContent) adminTabContent.classList.add('active');
-        await cargarAdministradores();
-    }
-});
-
 // --- Persistencia de sesión admin ---
 function guardarSesionAdmin(adminObj) {
     localStorage.setItem('sesionAdmin', JSON.stringify(adminObj));
@@ -1285,7 +1266,6 @@ function configurarEventListeners() {
             const exitoso = await autenticarAdmin(username, password);
             if (exitoso) {
                 mostrarMensaje('Login exitoso. Accediendo a configuración...');
-                setTimeout(async () => {
                     ocultarMensaje();
                     document.getElementById('panel-configuracion').classList.remove('oculto');
                     renderConfigTablero();
@@ -1299,7 +1279,6 @@ function configurarEventListeners() {
                     const adminTabContent = document.getElementById('tab-admin');
                     if (adminTabContent) adminTabContent.classList.add('active');
                     await cargarAdministradores();
-                }, 1000);
             }
         };
     }
