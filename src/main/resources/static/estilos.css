@@ -745,7 +745,7 @@ main {
     font-weight: bold;
 }
 #tabla-bitacora tr:hover {
-    background: #f9f9f9;
+    background: #a1a1a1;
 }
 
 /* Filtros de bitácora */
